@@ -60,11 +60,11 @@ ft_array	ft_put_in_array(char **src)
 		temp[i] = src[0][i];
 		i++;
 	}
-	array.size = ft_atoi(temp);
+	array.size[1] = ft_atoi(temp);
 	free(temp);
-	array.array = malloc(array.size * sizeof(int *));
+	array.array = malloc(array.size[1] * sizeof(int *));
 	i = 1;
-	while (i < array.size + 1)
+	while (i < array.size[1] + 1)
 	{
 		array.array[i - 1] = malloc((ft_strlen(src[i]) + 1) * sizeof(int));
 		j = 0;
@@ -100,7 +100,7 @@ int	ft_check(ft_array array)
 		j++;
 	}
 	i++;
-	while (i < array.size)
+	while (i < array.size[1])
 	{
 		j = 0;
 		len2 = 0;
@@ -115,7 +115,7 @@ int	ft_check(ft_array array)
 			return (0);
 		i++;
 	}
-	return (1);
+	return (len);
 }
 
 ft_array	ft_split_in_tab(char *filename)
@@ -127,7 +127,8 @@ ft_array	ft_split_in_tab(char *filename)
 	src = ft_put_in_char(filename);
 	dest = ft_split(src, "\n");
 	array = ft_put_in_array(dest);
-	if (array.array == NULL || !ft_check(array))
+	array.size[0] = ft_check(array);
+	if (array.array == NULL || !array.size[0])
 		array.array = NULL;
 	free(src);
 	free(dest);

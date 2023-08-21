@@ -25,6 +25,7 @@ int	main(int argc, char **argv)
 			ft_putstr("map error");
 		else
 		{
+			array = algo(array);
 			ft_show_tab(array);
 		}
 		ft_putstr("\n");

@@ -15,20 +15,17 @@ FLAGS = -Wextra -Werror -Wall
 HEADER = ./includes
 FILES = *.c
 FILES_PATH = srcs/
-INPUT = file/test
-INPUT2 = file/example_file2
-INPUT3 = file/example_file3
-INPUT4 = file/example_file4
+INPUT = file/test file/test2
 X = 10
 Y = 10
-DESINTY = 5
+DESINTY = 2
 
 all: $(NAME)
 
 $(NAME):
 	# norminette -R CheckDefine $(FILES_PATH)$(FILES) $(HEADER)/*.h
 	cc $(FLAGS) $(FILES_PATH)$(FILES) -I $(HEADER) -o $(NAME)
-	time ./$(NAME) file/test
+	./$(NAME) $(INPUT)
 
 memory:
 	cc $(FLAGS) $(FILES_PATH)$(FILES) -I $(HEADER) -o $(NAME)
@@ -37,6 +34,7 @@ memory:
 map:
 	rm -f file/test
 	./file/map_generator.pl $(X) $(Y) $(DESINTY) >> file/test
+	./file/map_generator.pl $(X) $(Y) $(DESINTY) >> file/test2
 
 clean:
 	rm -f $(NAME)

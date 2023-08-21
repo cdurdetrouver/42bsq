@@ -21,7 +21,7 @@
 
 typedef struct ft_array
 {
-	int		size;
+	int		size[2];
 	int		**array;
 	char	fill[3];
 }			ft_array;
@@ -36,5 +36,6 @@ void		ft_putchar(char c);
 ft_array	ft_get_fill_and_size(char **src);
 int			ft_atoi(char *str);
 int			ft_strlen(char *str);
+ft_array	algo(ft_array arr);
 
 #endif

@@ -18,7 +18,7 @@ void	ft_show_tab(ft_array src)
 	int	j;
 
 	i = 0;
-	while (i < src.size)
+	while (i < src.size[1])
 	{
 		j = 0;
 		while (src.array[i][j] != -1)
