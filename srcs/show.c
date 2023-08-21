@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   show.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 15:12:10 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/21 11:30:12 by gbazart          ###   ########.fr       */
+/*   Created: 2023/08/21 09:29:40 by gbazart           #+#    #+#             */
+/*   Updated: 2023/08/21 11:30:01 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft.h"
 
-int	main(int argc, char **argv)
+void	ft_show_tab(ft_array src)
 {
-	int		i;
-	ft_array	array;
+	int i;
+	int j;
 
-	i = 1;
-	while (argv[i] && argc > 1)
+	i = 0;
+	while (i < src.size)
 	{
-		array = ft_split_in_tab(argv[i]);
-		if (array.array == NULL)
-			ft_putstr("map error");
-		else
+		j = 0;
+		while (src.array[i][j] != -1)
 		{
-			ft_show_tab(array);
+			if (src.array[i][j] == 0)
+				ft_putchar(src.fill[0]);
+			else if (src.array[i][j] == 1)
+				ft_putchar(src.fill[1]);
+			else if (src.array[i][j] == 2)
+				ft_putchar(src.fill[2]);
+			j++;
 		}
-		ft_putstr("\n");
+		ft_putchar('\n');
 		i++;
 	}
-	free(array.array);
-	return (0);
 }

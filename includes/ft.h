@@ -6,7 +6,7 @@
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 15:20:46 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/20 23:41:40 by gbazart          ###   ########.fr       */
+/*   Updated: 2023/08/21 10:06:32 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 typedef struct ft_array
 {
 	int		size;
-	char	**array;
+	int		**array;
 	char	fill[3];
 }			ft_array;
 

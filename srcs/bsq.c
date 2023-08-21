@@ -6,7 +6,7 @@
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 16:25:03 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/20 23:43:07 by gbazart          ###   ########.fr       */
+/*   Updated: 2023/08/21 11:45:21 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,43 +37,89 @@ char	*ft_put_in_char(char *filename)
 	return (dest);
 }
 
-void	ft_replace(ft_array *src)
+ft_array	ft_put_in_array(char **src)
 {
-	int i;
-	int j;
+	ft_array	array;
+	int			i;
+	int			j;
+	int			len;
+	char		*temp;
 
-	i = 0;
-	j	= 0;
-	while (i < src->size)
+	len = ft_strlen(src[0]);
+	i = 2;
+	while (i >= 0)
 	{
-		if (src->array[i][j] == src->fill[0])
-			src->array[i][j] = '0';
-		else if (src->array[i][j] == src->fill[1])
-			src->array[i][j] = '1';
+		array.fill[i] = src[0][len - 1];
+		len--;
+		i--;
+	}
+	i = 0;
+	temp = malloc(len * sizeof(char));
+	while (i < len)
+	{
+		temp[i] = src[0][i];
+		i++;
+	}
+	array.size = ft_atoi(temp);
+	free(temp);
+	array.array = malloc(array.size * sizeof(int *));
+	i = 1;
+	while (i < array.size + 1)
+	{
+		array.array[i - 1] = malloc((ft_strlen(src[i]) + 1) * sizeof(int));
+		j = 0;
+		while (src[i][j] != '\0')
+		{
+			if (src[i][j] == array.fill[0])
+				array.array[i - 1][j] = 0;
+			else if (src[i][j] == array.fill[1])
+				array.array[i - 1][j] = 1;
+			else
+			{
+				array.array = NULL;
+				return (array);
+			}
+			j++;
+		}
+		array.array[i - 1][j] = -1;
+		i++;
+	}
+	return (array);
+}
+
+int	ft_check(ft_array array)
+{
+	int	i;
+	int	j;
+	int len;
+	int len2;
+
+	j = 0;
+	i = 0;
+	len = 0;
+	while (array.array[i][j] != -1)
+	{
+		len++;
 		j++;
 	}
 	i++;
-}
-
-ft_array	ft_get_fill_and_size(char **src)
-{
-	ft_array	array;
-
-	if (ft_strlen(src[0]) == 5)
+	while (i < array.size)
 	{
-		array.size = ft_atoi(&src[0][0]);
-		array.fill[0] = src[0][1];
-		array.fill[1] = src[0][2];
-		array.fill[2] = src[0][3];
-		array.array = &src[1];
+		j = 0;
+		len2 = 0;
+		while (array.array[i][j] != -1)
+		{
+
+			if (array.array[i][j] != 1 && array.array[i][j] != -1 && array.array[i][j] != 0)
+				return (0);
+			len2++;
+			j++;
+		}
+		if (len2 != len)
+			return (0);
+		i++;
 	}
-	else
-	{
-		array.array = NULL;
-		return (array);
-	}
-	ft_replace(&array);
-	return (array);
+	return (1);
 }
 
 ft_array	ft_split_in_tab(char *filename)
@@ -84,30 +130,12 @@ ft_array	ft_split_in_tab(char *filename)
 
 	src = ft_put_in_char(filename);
 	dest = ft_split(src, "\n");
-	array = ft_get_fill_and_size(dest);
-	free(src);
-	return (array);
-}
-
-void	ft_show_tab(ft_array src)
-{
-	int i;
-	int j;
-
-	i = 1;
-	while (i < src.size)
+	array = ft_put_in_array(dest);
+	if (array.array == NULL || !ft_check(array))
 	{
-		j = 0;
-		while (src.array[i][j])
-		{
-			if (src.array[i][j] == 0)
-				ft_putchar(src.fill[0]);
-			else if (src.array[i][j] == 1)
-				ft_putchar(src.fill[1]);
-			else
-				ft_putchar(src.fill[2]);
-			j++;
-		}
-		ft_putchar('\n');
+		array.array = NULL;
 	}
+	free(src);
+	free(dest);
+	return (array);
 }
