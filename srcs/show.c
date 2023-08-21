@@ -6,7 +6,7 @@
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 09:29:40 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/21 11:30:01 by gbazart          ###   ########.fr       */
+/*   Updated: 2023/08/21 14:30:17 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_show_tab(ft_array src)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < src.size)

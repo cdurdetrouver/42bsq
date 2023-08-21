@@ -6,7 +6,7 @@
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 16:25:03 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/21 11:45:21 by gbazart          ###   ########.fr       */
+/*   Updated: 2023/08/21 14:28:16 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ ft_array	ft_put_in_array(char **src)
 			else if (src[i][j] == array.fill[1])
 				array.array[i - 1][j] = 1;
 			else
-			{
-				array.array = NULL;
-				return (array);
-			}
+				array.array[i - 1][j] = 2;
 			j++;
 		}
 		array.array[i - 1][j] = -1;
@@ -109,8 +106,7 @@ int	ft_check(ft_array array)
 		len2 = 0;
 		while (array.array[i][j] != -1)
 		{
-
-			if (array.array[i][j] != 1 && array.array[i][j] != -1 && array.array[i][j] != 0)
+			if (array.array[i][j] != 1 && array.array[i][j] != 0)
 				return (0);
 			len2++;
 			j++;
@@ -132,9 +128,7 @@ ft_array	ft_split_in_tab(char *filename)
 	dest = ft_split(src, "\n");
 	array = ft_put_in_array(dest);
 	if (array.array == NULL || !ft_check(array))
-	{
 		array.array = NULL;
-	}
 	free(src);
 	free(dest);
 	return (array);
