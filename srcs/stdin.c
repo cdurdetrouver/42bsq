@@ -1,61 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   func_base.c                                        :+:      :+:    :+:   */
+/*   stdin.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 15:46:32 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/23 10:50:27 by gbazart          ###   ########.fr       */
+/*   Created: 2023/08/23 11:52:39 by gbazart           #+#    #+#             */
+/*   Updated: 2023/08/23 13:45:29 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft.h"
 
-void	ft_putstr(char *str)
+char	*ft_realloc(char *src, int size)
 {
-	while (*str)
-		write(1, str++, 1);
+	char *new_str;
+
+	new_str = malloc(size * sizeof(char));
+	new_str = ft_strcpy(new_str, src);
+	free(src);
+	return (new_str);
 }
 
-void	ft_putchar(char c)
+char 	*ft_standard_intput(void)
 {
-	write(1, &c, 1);
-}
-
-int ft_strlen(char *str)
-{
-	int	i;
+	char	c;
+	char 	*dest;
+	int 	size;
+	int		i;
 
 	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-int	ft_atoi(char *str)
-{
-	int	nb;
-
-	nb = 0;
-	while (*str <= 57 && *str >= 48)
+	size = 10;
+	dest = malloc(size * sizeof(char));
+	while (read(STDIN_FILENO, &c, 1) > 0)
 	{
-		nb = nb * 10 + (*str - 48);
-		str++;
-	}
-	return (nb);
-}
-
-char *ft_strcpy(char *dest, char *src)
-{
-	int i;
-
-	i = 0;
-	while(src[i])
-	{
-		dest[i] = src[i];
+		dest[i] = c;
+		if (i >= size - 1)
+		{
+			size += 20;
+			dest = ft_realloc(dest, size);
+			if (!dest)
+				exit(EXIT_FAILURE);
+		}
 		i++;
 	}
-	dest[i] = '\0';
 	return (dest);
 }
+

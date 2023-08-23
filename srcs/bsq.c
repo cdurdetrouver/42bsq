@@ -1,136 +1,127 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bsq.c                                              :+:      :+:    :+:   */
+/*   bsq.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/20 16:25:03 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/21 14:28:16 by gbazart          ###   ########.fr       */
+/*   Created: 2023/08/22 21:39:39 by gbazart           #+#    #+#             */
+/*   Updated: 2023/08/22 22:32:51 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft.h"
 
-char	*ft_put_in_char(char *filename)
+int	create_array2(char *dest, int len, t_array *array)
 {
-	int		fd;
-	char	c;
-	int		len;
-	char	*dest;
+	char	*temp;
 	int		i;
 
-	fd = open(filename, O_RDONLY);
+	i = -1;
+	if (dest[len - 2] == dest[len - 3] || dest[len - 2] == dest[len - 4]
+		|| dest[len - 3] == dest[len - 4])
+		return (1);
+	array->fill[2] = dest[len - 2];
+	array->fill[1] = dest[len - 3];
+	array->fill[0] = dest[len - 4];
+	temp = malloc((len - 3) * sizeof(char));
+	if (!temp)
+		exit(EXIT_FAILURE);
+	while (++i < len - 4)
+		temp[i] = dest[i];
+	temp[i] = 0;
+	array->size[1] = ft_atoi(temp);
+	if (array->size[1] < 1)
+		return (1);
+	free(temp);
+	array->array = malloc(array->size[1] * sizeof(char *));
+	if (!array->array)
+		exit(EXIT_FAILURE);
+	return (0);
+}
+
+int	create_array(t_array *array, int fd, char *filename)
+{
+	char	c;
+	int		i;
+	int		len;
+	char	*dest;
+
 	len = 0;
-	while (read(fd, &c, 1) > 0)
+	i = 0;
+	c = '\0';
+	while (c != '\n' && read(fd, &c, 1) > 0)
 		len++;
 	close(fd);
-	dest = malloc(sizeof(char) * (len + 1));
+	if (len < 4)
+		return (EXIT_FAILURE);
+	dest = malloc((len + 1) * sizeof(char));
 	if (!dest)
-		return (NULL);
+		exit(EXIT_FAILURE);
 	fd = open(filename, O_RDONLY);
-	i = 0;
-	while (read(fd, &c, 1) > 0)
+	while (read(fd, &c, 1) > 0 && c != '\n')
 		dest[i++] = c;
 	dest[i] = '\0';
-	close(fd);
-	return (dest);
+	if (create_array2(dest, len, array))
+		return (1);
+	free(dest);
+	return (0);
 }
 
-ft_array	ft_put_in_array(char **src)
+int	ft_malloc_array(t_array *array, int fd)
 {
-	ft_array	array;
-	int			i;
-	int			j;
-	int			len;
-	char		*temp;
+	char	c;
+	int		len;
+	int		i;
 
-	len = ft_strlen(src[0]);
-	i = 2;
-	while (i >= 0)
-	{
-		array.fill[i] = src[0][len - 1];
-		len--;
-		i--;
-	}
-	i = 0;
-	temp = malloc(len * sizeof(char));
-	while (i < len)
-	{
-		temp[i] = src[0][i];
-		i++;
-	}
-	array.size[1] = ft_atoi(temp);
-	free(temp);
-	array.array = malloc(array.size[1] * sizeof(int *));
-	i = 1;
-	while (i < array.size[1] + 1)
-	{
-		array.array[i - 1] = malloc((ft_strlen(src[i]) + 1) * sizeof(int));
-		j = 0;
-		while (src[i][j] != '\0')
-		{
-			if (src[i][j] == array.fill[0])
-				array.array[i - 1][j] = 0;
-			else if (src[i][j] == array.fill[1])
-				array.array[i - 1][j] = 1;
-			else
-				array.array[i - 1][j] = 2;
-			j++;
-		}
-		array.array[i - 1][j] = -1;
-		i++;
-	}
-	return (array);
-}
-
-int	ft_check(ft_array array)
-{
-	int	i;
-	int	j;
-	int len;
-	int len2;
-
-	j = 0;
 	i = 0;
 	len = 0;
-	while (array.array[i][j] != -1)
-	{
+	while (read(fd, &c, 1) > 0 && c != '\n')
 		len++;
-		j++;
-	}
-	i++;
-	while (i < array.size[1])
+	while (i < array->size[1])
 	{
-		j = 0;
-		len2 = 0;
-		while (array.array[i][j] != -1)
-		{
-			if (array.array[i][j] != 1 && array.array[i][j] != 0)
-				return (0);
-			len2++;
-			j++;
-		}
-		if (len2 != len)
-			return (0);
+		array->array[i] = malloc((len + 1) * sizeof(char));
+		if (!array->array[i])
+			exit(EXIT_FAILURE);
 		i++;
 	}
+	array->size[0] = len;
 	return (len);
 }
 
-ft_array	ft_split_in_tab(char *filename)
+void	read_file(int fd, char *filename)
 {
-	ft_array	array;
-	char		**dest;
-	char		*src;
+	char	c;
 
-	src = ft_put_in_char(filename);
-	dest = ft_split(src, "\n");
-	array = ft_put_in_array(dest);
-	array.size[0] = ft_check(array);
-	if (array.array == NULL || !array.size[0])
-		array.array = NULL;
-	free(src);
-	free(dest);
-	return (array);
+	close(fd);
+	fd = open(filename, O_RDONLY);
+	c = '\0';
+	while (read(fd, &c, 1) > 0)
+	{
+		if (c == '\n')
+			break ;
+	}
+}
+
+int	ft_fill_array(int len, t_array *array, int fd)
+{
+	char	*buffer;
+	int		i;
+
+	i = 0;
+	buffer = malloc((len + 1) * sizeof(char));
+	if (!buffer)
+		exit(EXIT_FAILURE);
+	while (read(fd, buffer, len + 1) > 0)
+	{
+		array->array[i] = ft_strcpy(array->array[i], buffer);
+		if (buffer[len] == '\n')
+			array->array[i][len] = '\0';
+		else
+			return (1);
+		i++;
+	}
+	free(buffer);
+	close(fd);
+	return (0);
 }

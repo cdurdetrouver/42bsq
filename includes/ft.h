@@ -6,7 +6,7 @@
 /*   By: gbazart <gbazart@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 15:20:46 by gbazart           #+#    #+#             */
-/*   Updated: 2023/08/21 10:06:32 by gbazart          ###   ########.fr       */
+/*   Updated: 2023/08/23 14:55:32 by gbazart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,21 @@
 typedef struct ft_array
 {
 	int		size[2];
-	int		**array;
+	char	**array;
 	char	fill[3];
-}			ft_array;
+}			t_array;
 
 void		ft_putstr(char *str);
-int			ft_write(char *filename);
-char		*ft_put_in_char(char *filename);
-char		**ft_split(char *str, char *charset);
-ft_array	ft_split_in_tab(char *filename);
-void		ft_show_tab(ft_array src);
 void		ft_putchar(char c);
-ft_array	ft_get_fill_and_size(char **src);
 int			ft_atoi(char *str);
+void		ft_show_tab(t_array src);
+int			ft_malloc_array(t_array *array, int fd);
+int			ft_fill_array(int len, t_array *array, int fd);
+void		read_file(int fd, char *filename);
+int			create_array(t_array *array, int fd, char *filename);
+char		*ft_strcpy(char *dest, char *src);
 int			ft_strlen(char *str);
-ft_array	algo(ft_array arr);
+char		*ft_standard_intput(void);
+char		**ft_split(char *str, char *charset);
 
 #endif
